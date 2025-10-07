@@ -1,0 +1,33 @@
+module Lab4(
+    input  wire       sys_clk,   
+    input  wire       sys_rst_n, 
+    input  wire       en,        
+    output reg        led_out    
+);
+
+parameter CNT_MAX = 24'd24999999;
+
+reg [23:0] cnt;
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin        
+        cnt <= 24'd0;
+    end else if (en && cnt == CNT_MAX) begin 
+        cnt <= 24'd0;
+    end else if (en) begin        
+        cnt <= cnt + 24'd1;
+    end else begin                
+        cnt <= cnt;
+    end
+end
+
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin        
+        led_out <= 1'b1;         
+    end else if (en && cnt == CNT_MAX) begin 
+        led_out <= ~led_out;      
+    end else begin                
+        led_out <= led_out;       
+    end
+end
+
+endmodule
