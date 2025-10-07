@@ -1,0 +1,81 @@
+module Lab5(
+    input  wire       sys_clk,  
+    input  wire       sys_rst_n, 
+    input  wire       key1,     
+    input  wire       key2,     
+    input  wire       key3,
+    output reg        led_out    
+);
+
+parameter DELAY_TIME = 20'd1000000
+reg        key1_flag;
+reg        key2_flag;
+reg        key3_flag;
+reg [19:0] key1_cnt; 
+reg [19:0] key2_cnt; 
+reg [19:0] key3_cnt; 
+a
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin
+        key1_flag <= 1'b0;
+        key1_cnt  <= 20'd0;
+    end else if (key1 == 1'b0) begin 
+        if (key1_cnt < DELAY_TIME) begin
+            key1_cnt <= key1_cnt + 20'd1;
+        end else begin
+            key1_flag <= 1'b1;
+            key1_cnt  <= DELAY_TIME;
+        end
+    end else begin 
+        key1_flag <= 1'b0;
+        key1_cnt  <= 20'd0;
+    end
+end
+
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin
+        key2_flag <= 1'b0;
+        key2_cnt  <= 20'd0;
+    end else if (key2 == 1'b0) begin
+        if (key2_cnt < DELAY_TIME) begin
+            key2_cnt <= key2_cnt + 20'd1;
+        end else begin
+            key2_flag <= 1'b1;
+            key2_cnt  <= DELAY_TIME;
+        end
+    end else begin
+        key2_flag <= 1'b0;
+        key2_cnt  <= 20'd0;
+    end
+end
+
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin
+        key3_flag <= 1'b0;
+        key3_cnt  <= 20'd0;
+    end else if (key3 == 1'b0) begin
+        if (key3_cnt < DELAY_TIME) begin
+            key3_cnt <= key3_cnt + 20'd1;
+        end else begin
+            key3_flag <= 1'b1;
+            key3_cnt  <= DELAY_TIME;
+        end
+    end else begin
+        key3_flag <= 1'b0;
+        key3_cnt  <= 20'd0;
+    end
+end
+
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if (!sys_rst_n) begin
+        led_out <= 1'b0; 
+    end else if (key1_flag) begin
+        led_out <= 1'b1; 
+    end else if (key2_flag) begin
+        led_out <= 1'b0; 
+    end else if (key3_flag) begin
+        led_out <= ~led_out; 
+    end
+end
+
+endmodule
